@@ -1,0 +1,40 @@
+name: Makefile checks
+
+on:
+  pull_request:
+    paths:
+      - 'Makefile'
+      - 'scripts/**'
+      - 'stacks/**'
+  push:
+    branches:
+      - main
+      - master
+    paths:
+      - 'Makefile'
+      - 'scripts/**'
+      - 'stacks/**'
+
+jobs:
+  make-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: sudo apt-get update && sudo apt-get install -y gettext-base
+
+      - name: Show Make and shell versions
+        run: |
+          make --version
+          bash --version
+
+      - name: Run make syntax/dry-run
+        run: make -n
+
+      - name: Render templates dry-run
+        env:
+          TAG: test
+          HAL_ROOT: ${{ github.workspace }}
+        run: TAG=test HAL_ROOT=${{ github.workspace }} make -n render-all
