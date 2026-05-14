@@ -20,28 +20,25 @@ ensure_cmd() {
 }
 
 files=$(git ls-files 'scripts/*.sh' || true)
-if [ -n "$files" ]; then
-  ensure_cmd shellcheck shellcheck
-  echo "→ Running shellcheck on: $files"
-  shellcheck -x $files
-else
-  echo "→ No shell scripts found to lint"
-fi
+
+# Ensure tools we will use
+ensure_cmd shellcheck shellcheck
+ensure_cmd shfmt shfmt
 
 if [ -n "$files" ]; then
-  ensure_cmd shfmt shfmt
+  echo "→ Running shellcheck on: $files"
+  echo "$files" | xargs -r shellcheck -x
   echo "→ Checking formatting with shfmt (diff mode)"
-  shfmt -d $files
+  echo "$files" | xargs -r shfmt -d
 else
-  echo "→ No shell scripts found to format-check"
+  echo "No shell scripts found to lint/format"
 fi
 
 if [ -d "tests" ]; then
-  ensure_cmd bats bats
-  echo "→ Running bats tests in ./tests"
-  find tests -name '*.bats' -print | xargs -r bats
+  echo "→ Running bats tests (if any)"
+  find tests -name '*.bats' -print0 | xargs -0 -r bats
 else
-  echo "→ No tests directory found; skipping bats"
+  echo "No tests directory found; skipping bats"
 fi
 
 echo "✔ Local CI checks complete"
