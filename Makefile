@@ -9,7 +9,7 @@ export TAG
 
 STACK_DIR ?= $(HAL_ROOT)/stacks
 
-.PHONY: help render-all backup restore system-reset monitoring-status system-diff persona-test
+.PHONY: help render-all backup restore system-reset monitoring-status system-diff persona-test ci-checks
 
 help:
 	@echo "HAL v2 Makefile (modular)"
@@ -65,3 +65,7 @@ persona-test:
 	curl --fail --silent --show-error --max-time 5 http://ai-srv-node2:9001/health || echo "  ✖ Node2 health failed"; \
 	curl --fail --silent --show-error --max-time 5 http://localhost:9100/health || echo "  ✖ Memory health failed"; \
 	echo "✔ Persona / routing tests complete"
+
+ci-checks:
+	@echo "Running local CI checks (shellcheck, shfmt, bats)"; \
+	./scripts/ci/checks.sh
