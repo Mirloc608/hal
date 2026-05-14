@@ -9,7 +9,7 @@ ensure_cmd() {
       echo "ERROR: required command '$1' not found in CI environment"
       exit 2
     fi
-    echo "Warning: '$1' not found. Attempting to install (local only)."
+    echo "Warning: '$1' not found. Attempting to install local package $2."
     if command -v apt-get >/dev/null 2>&1; then
       sudo apt-get update && sudo apt-get install -y "$2"
     else
@@ -28,6 +28,7 @@ ensure_cmd shfmt shfmt
 if [ -n "$files" ]; then
   echo "→ Running shellcheck on: $files"
   echo "$files" | xargs -r shellcheck -x
+
   echo "→ Checking formatting with shfmt (diff mode)"
   echo "$files" | xargs -r shfmt -d
 else
