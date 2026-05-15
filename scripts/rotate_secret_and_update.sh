@@ -166,7 +166,7 @@ if [ -n "${IMAGE_NAME}" ]; then
   fi
 
   # Build
-  docker build -t "${IMAGE_NAME}" "${ENGINE_CONTEXT"
+  docker build -t "${IMAGE_NAME}" "${ENGINE_CONTEXT}"
 
   if [ "${DO_PUSH}" = true ]; then
     log "Pushing image ${IMAGE_NAME} to registry..."
@@ -222,9 +222,8 @@ cat <<EOF
 
 4) Test router endpoints (use token from router container):
    export TOKEN=\$(docker exec ${ROUTER_CID} sh -c 'cat ${ROUTER_SECRET_PATH}')
-   curl -sS -H "Authorization: Bearer \$TOKEN" "http://${ROUTER_IP}:9000/openai/models" | jq .
-   curl -sS -H "Authorization: Bearer \$TOKEN" "http://${ROUTER_IP}:9000/routing/why?model=deepseek-coder:6.7b" | jq .
-
+   curl -sS -H "Authorization: Bearer $TOKEN" "http://${ROUTER_IP}:9000/openai/models" | jq .
+   curl -sS -H "Authorization: Bearer $TOKEN" "http://${ROUTER_IP}:9000/routing/why?model=deepseek-coder:6.7b" | jq .
 EOF
 
 log "Script finished."

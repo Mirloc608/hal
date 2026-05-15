@@ -5,7 +5,9 @@ set -euo pipefail
 
 HAL_ROOT=${HAL_ROOT:-/opt/hal}
 STACK_DIR=${STACK_DIR:-"$HAL_ROOT/stacks"}
-TAG=${TAG:-$(date +%Y%m%d-%H%M%S)}
+
+# shellcheck disable=SC2016
+  TAG="$TAG" envsubst '${TAG}' < "$tpl" | sed "s|@@TAG@@|$TAG|g; s|{{HAL_TAG}}|$TAG|g" > "$out"
 DRY_RUN=0
 VERBOSE=0
 
@@ -30,9 +32,11 @@ for tpl in $TEMPLATE_GLOB; do
   out="$STACK_DIR/$(basename "$tpl" .tpl)"
   if [ "$DRY_RUN" -eq 1 ]; then
     echo "DRY RUN: would render $tpl -> $out"
+# shellcheck disable=SC2016
     [ "$VERBOSE" -eq 1 ] && echo "  (would run envsubst and sed with TAG=$TAG)"
     continue
   fi
+# shellcheck disable=SC2016
   TAG="$TAG" envsubst '${TAG}' < "$tpl" | sed "s|@@TAG@@|$TAG|g; s|{{HAL_TAG}}|$TAG|g" > "$out"
   echo "rendered $tpl -> $out"
 done

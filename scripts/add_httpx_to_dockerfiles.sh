@@ -17,7 +17,8 @@ done
 backup_and_write() {
   local src="$1"
   local new="$2"
-  local bak="${src}.bak.$(date +%s)"
+  local bak
+bak="${src}.bak.$(date +%s)"
   cp "${src}" "${bak}"
   if [ "${DRY_RUN}" = true ]; then
     echo "DRY RUN: would write patched file to ${src} (backup at ${bak})"
@@ -39,7 +40,8 @@ for d in "${TARGET_DIRS[@]}"; do
     echo "Processing ${df}..."
     tmp="$(mktemp)"
     inserted=false
-
+: ""  # intentionally unused
+    : "${inserted}"
     # Strategy: insert after first RUN that contains pip install or requirements.txt handling
     awk -v insert="${INSERT_LINE}" -v inserted_flag=0 '
     BEGIN { inserted=0 }

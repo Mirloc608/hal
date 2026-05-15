@@ -45,8 +45,7 @@ install_key() {
 
   ssh-copy-id "$host" || {
     echo "[${host}] ssh-copy-id failed — trying manual install..."
-    cat "$HOME/.ssh/id_ed25519.pub" | ssh "$host" \
-      "mkdir -p ~/.ssh && cat >> ~/.ssh/authorized_keys && chmod 600 ~/.ssh/authorized_keys"
+      ssh "$host" "mkdir -p ~/.ssh && cat >> ~/.ssh/authorized_keys" < "$HOME/.ssh/id_ed25519.pub"
   }
 }
 

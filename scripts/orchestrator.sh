@@ -42,16 +42,16 @@ while [ $# -gt 0 ]; do
   case "$1" in
     --dry-run) DRY_RUN=true; shift ;;
     --image-prefix) IMAGE_PREFIX="$2"; shift 2 ;;
-    --canonical-secret) CANONICAL_SECRET="$2"; shift 2 ;;
     --openwebui-image) OPENWEBUI_IMAGE="$2"; shift 2 ;;
+    --canonical-secret) CANONICAL_SECRET="$2"; shift 2 ;;
     --help) echo "Usage: $0 [--dry-run] [--image-prefix PREFIX]"; exit 0 ;;
     *) echo "Unknown arg: $1"; exit 1 ;;
   esac
 done
 
 # Derived values
-NODE1_IMAGE="${IMAGE_PREFIX}/${NODE1_IMAGE_SUFFIX}"
-NODE2_IMAGE="${IMAGE_PREFIX}/${NODE2_IMAGE_SUFFIX}"
+NODE1_IMAGE="""/${NODE1_IMAGE_SUFFIX}"
+NODE2_IMAGE="""/${NODE2_IMAGE_SUFFIX}"
 
 # 1. Ensure host persistent directories exist (local node)
 print "Ensuring host persistent directories exist under ${MOUNT_BASE}..."
@@ -99,7 +99,7 @@ if [ -f "${NODE1_DIR}/Dockerfile" ] || [ -f "${NODE1_DIR}/Dockerfile.rag" ]; the
   [ -f "${NODE1_DIR}/Dockerfile.rag" ] && DOCKERFILE1="${NODE1_DIR}/Dockerfile.rag"
   print "Found Dockerfile for node1: ${DOCKERFILE1}"
   run "docker build -t ${NODE1_IMAGE} -f ${DOCKERFILE1} ${NODE1_DIR}"
-  run "docker login $(echo ${IMAGE_PREFIX} | cut -d'/' -f1) || true"
+  run "docker login $(echo "" | cut -d'/' -f1) || true"
   run "docker push ${NODE1_IMAGE} || true"
 else
   print "No Dockerfile found for node1; skipping build."
@@ -110,7 +110,7 @@ if [ -f "${NODE2_DIR}/Dockerfile" ] || [ -f "${NODE2_DIR}/Dockerfile.rag" ]; the
   [ -f "${NODE2_DIR}/Dockerfile.rag" ] && DOCKERFILE2="${NODE2_DIR}/Dockerfile.rag"
   print "Found Dockerfile for node2: ${DOCKERFILE2}"
   run "docker build -t ${NODE2_IMAGE} -f ${DOCKERFILE2} ${NODE2_DIR}"
-  run "docker login $(echo ${IMAGE_PREFIX} | cut -d'/' -f1) || true"
+  run "docker login $(echo "" | cut -d'/' -f1) || true"
   run "docker push ${NODE2_IMAGE} || true"
 else
   print "No Dockerfile found for node2; skipping build."

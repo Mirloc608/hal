@@ -29,9 +29,9 @@ echo "Logging into ${REGISTRY}"
 docker login "${REGISTRY}" -u registryuser
 
 # Gather image lines
-images_raw=$(grep -hE '^[[:space:]]*image:[[:space:]]*' ${TEMPLATE_GLOB} 2>/dev/null || true)
+images_raw=$(grep -hE '^[[:space:]]*image:[[:space:]]*' "" 2>/dev/null || true)
 if [ -z "$images_raw" ]; then
-  echo "No image lines found in ${TEMPLATE_GLOB}"
+  echo "No image lines found in """
   exit 0
 fi
 
@@ -43,7 +43,7 @@ images=$(printf "%s\n" "${images_raw}" \
   | sort -u)
 
 echo "Found image entries in templates:"
-printf "  %s\n" ${images}
+printf "  %s\n" "${images}"
 
 for img in ${images}; do
   # Replace known token forms with TAG

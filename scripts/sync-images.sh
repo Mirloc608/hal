@@ -11,7 +11,8 @@ for IMG in $IMAGES; do
   echo "[SYNC] Syncing image: $IMG"
   for NODE in "${TARGETS[@]}"; do
     echo "  → $NODE"
-    ssh "$SOURCE" "docker save $IMG" | ssh "$NODE" "docker load" || echo "  WARN: failed for $NODE on $IMG"
+# shellcheck disable=SC2029
+    ssh "$SOURCE" "docker save \\" | ssh "$NODE" docker load || echo "  WARN: failed for $NODE on $IMG"
   done
 done
 

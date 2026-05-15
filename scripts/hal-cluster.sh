@@ -9,7 +9,10 @@ NODE2_HOST="ai-srv-node2"
 REMOTE_DIR="/opt/hal/docker"
 
 BLUE="\033[1;34m"
+# shellcheck disable=SC2034
 GREEN="\033[1;32m"
+# shellcheck disable=SC2034
+# shellcheck disable=SC2034
 YELLOW="\033[1;33m"
 RED="\033[1;31m"
 RESET="\033[0m"

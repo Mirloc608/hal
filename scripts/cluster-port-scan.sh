@@ -38,7 +38,7 @@ echo "-----------------------------------------------"
 echo "[4] Suggesting SAFE ports (3000–3999 range)..."
 echo
 
-USED=$(cat /tmp/hal_used_ports.txt | tr '\n' ' ')
+USED=$(tr '\n' ' ' < /tmp/hal_used_ports.txt)
 echo "Used ports: $USED"
 echo
 

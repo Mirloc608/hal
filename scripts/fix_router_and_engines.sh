@@ -11,6 +11,10 @@ SECRET_NAME_V3="openwebui_hal_router_token_v3"
 SECRET_NAME_V2="openwebui_hal_router_token_v2"
 ROUTER_SECRET_PATH="/run/secrets/hal_router_token"
 HAL_ENV_PATH_V3="/run/secrets/${SECRET_NAME_V3}"
+# shellcheck disable=SC2034
+# shellcheck disable=SC2034
+# shellcheck disable=SC2034
+# shellcheck disable=SC2034
 HAL_ENV_PATH_V2="/run/secrets/${SECRET_NAME_V2}"
 ENGINE_SERVICE_1="node1_rag-node1"
 ENGINE_SERVICE_2="node2_rag-node2"
@@ -59,7 +63,8 @@ fi
 
 # --- 4) Export TOKEN from router container for host curl tests ---
 log "Exporting TOKEN from router container ${ROUTER_CID} into host env var TOKEN..."
-export TOKEN=$(docker exec "${ROUTER_CID}" sh -c "cat ${ROUTER_SECRET_PATH}")
+TOKEN=$(docker exec "${ROUTER_CID}" sh -c "cat ${ROUTER_SECRET_PATH}")
+export TOKEN
 if [ -z "${TOKEN}" ]; then
   log "ERROR: token read from router is empty."
   exit 1

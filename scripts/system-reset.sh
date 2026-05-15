@@ -13,18 +13,23 @@ while [ $# -gt 0 ]; do
     --yes) CONFIRM=1; shift ;;
     --dry-run|-n) DRY_RUN=1; shift ;;
     --verbose|-v) VERBOSE=1; shift ;;
+    -h|--help) echo "Usage: system-reset.sh --yes [--dry-run|-n] [--verbose|-v]"; exit 0 ;;
     *) echo "Unknown arg: $1"; exit 2 ;;
   esac
 done
 
-if [ "$DRY_RUN" -eq 1 ]; then
-  echo "DRY RUN: would remove stacks and volumes"
-  exit 0
-fi
-
 if [ "$CONFIRM" -ne 1 ] && [ "${RESET_CONFIRM:-no}" != "yes" ]; then
   echo "Destructive: provide --yes or set RESET_CONFIRM=yes"
   exit 1
+fi
+
+if [ "$DRY_RUN" -eq 1 ]; then
+  echo "DRY RUN: would remove stacks and volumes"
+fi
+
+# After parsing flags
+if [ "${VERBOSE:-0}" -eq 1 ]; then
+  echo "VERBOSE: DOCKER_CMD=${DOCKER_CMD}"
 fi
 
 echo "Performing full system reset"
