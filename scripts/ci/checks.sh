@@ -27,6 +27,7 @@ ensure_cmd shfmt shfmt
 ensure_cmd bats bats
 ensure_cmd bats bats
 ensure_cmd bats bats
+ensure_cmd bats bats
 
 if [ -n "$files" ]; then
   echo "→ Running shellcheck on: $files"
