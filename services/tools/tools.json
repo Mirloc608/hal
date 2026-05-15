@@ -1,0 +1,11 @@
+{
+  "tools": [
+    {"name": "rag_search", "module": "services.tools.rag", "handler": "rag_search"},
+    {"name": "rag_cite", "module": "services.tools.rag", "handler": "rag_cite"},
+    {"name": "rag_expand", "module": "services.tools.rag", "handler": "rag_expand"},
+    {"name": "rag_summarize", "module": "services.tools.rag", "handler": "rag_summarize"},
+    {"name": "rag_ground", "module": "services.tools.rag", "handler": "rag_ground"},
+    {"name": "rag_multiquery", "module": "services.tools.rag", "handler": "rag_multiquery"},
+    {"name": "rag_graph", "module": "services.tools.rag", "handler": "rag_graph"}
+  ]
+}
