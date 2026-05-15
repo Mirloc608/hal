@@ -24,6 +24,8 @@ files=$(git ls-files 'scripts/*.sh' || true)
 # Ensure tools we will use
 ensure_cmd shellcheck shellcheck
 ensure_cmd shfmt shfmt
+ensure_cmd bats bats
+ensure_cmd bats bats
 
 if [ -n "$files" ]; then
   echo "→ Running shellcheck on: $files"
