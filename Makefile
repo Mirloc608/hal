@@ -1,4 +1,3 @@
-#!/usr/bin/env make
 # Makefile - HAL v2 (upgraded, modular)
 SHELL := /bin/bash
 MAKEFLAGS += --warn-undefined-variables
@@ -151,11 +150,11 @@ deploy-all:
 	@set -euo pipefail; \
 	echo "→ Deploying all HAL stacks"; \
 	$(DOCKER_CMD) stack deploy -c $(STACK_DIR)/router.yml  router  --with-registry-auth; \
-	$(DOCKER_CMD) stack deploy -c $(STACK_DIR)/node1.yml	node1	--with-registry-auth; \
-	$(DOCKER_CMD) stack deploy -c $(STACK_DIR)/node2.yml	node2	--with-registry-auth; \
+	$(DOCKER_CMD) stack deploy -c $(STACK_DIR)/node1.yml   node1   --with-registry-auth; \
+	$(DOCKER_CMD) stack deploy -c $(STACK_DIR)/node2.yml   node2   --with-registry-auth; \
 	$(DOCKER_CMD) stack deploy -c $(STACK_DIR)/ke.yml	  ke	  --with-registry-auth; \
 	$(DOCKER_CMD) stack deploy -c $(STACK_DIR)/planner.yml planner --with-registry-auth; \
-	$(DOCKER_CMD) stack deploy -c $(STACK_DIR)/tools.yml	tools	--with-registry-auth; \
+	$(DOCKER_CMD) stack deploy -c $(STACK_DIR)/tools.yml   tools   --with-registry-auth; \
 	$(DOCKER_CMD) stack deploy -c $(STACK_DIR)/hal.yml	 hal	 --with-registry-auth; \
 	echo "✔ deploy-all complete"
 
