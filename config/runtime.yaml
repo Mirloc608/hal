@@ -1,0 +1,28 @@
+llm:
+  provider: ollama
+  default_model: llama3
+  router:
+    small_task: llama3
+    reasoning: mistral
+    code: codellama
+    fallback: llama3
+
+ollama:
+  host: http://localhost:11434
+
+rag:
+  vector_db: qdrant
+  qdrant_host: http://localhost:6333
+  collection: hal_memory
+
+mcp:
+  enabled: true
+  port: 9100
+
+vscode_bridge:
+  enabled: true
+  port: 9200
+
+system:
+  dev_root: /opt/hal
+  runtime_root: /srv/hal

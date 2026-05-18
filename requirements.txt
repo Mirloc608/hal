@@ -1,0 +1,8 @@
+fastapi
+uvicorn
+requests
+redis
+qdrant-client
+numpy
+flask==3.0.0
+requests==2.31.0

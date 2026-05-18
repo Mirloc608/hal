@@ -1,0 +1,1 @@
+# HAL core package root

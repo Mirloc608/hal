@@ -1,0 +1,134 @@
+services:
+
+  gateway:
+    image: 192.168.1.250:5000/hal-gateway:latest
+    ports:
+      - "7200:7200"
+    networks: [hal-net]
+    environment:
+      - HAL_MODE=gateway
+      - PS_HOST=ps
+      - REDIS_HOST=redis
+    deploy:
+      replicas: 1
+      placement:
+        constraints: [node.role == manager]
+      restart_policy:
+        condition: on-failure
+
+  redis:
+    image: redis:7-alpine
+    networks: [hal-net]
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+
+  qdrant:
+    image: qdrant/qdrant
+    networks: [hal-net]
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+
+  ps:
+    image: 192.168.1.250:5000/hal-ps:latest
+    command: python mesh/rl/ps/parameter_server.py
+    networks: [hal-net]
+    environment:
+      - HAL_ROLE=parameter_server
+      - PS_PORT=9000
+      - REDIS_HOST=redis
+    deploy:
+      replicas: 1
+      update_config:
+        order: start-first
+      placement:
+        constraints: [node.role == manager]
+      restart_policy:
+        condition: on-failure
+    ports:
+      - "9000:9000"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  ppo-learner:
+    image: 192.168.1.250:5000/hal-ppo-learner:latest
+    command: python mesh/rl/dist/learner.py
+    networks: [hal-net]
+    environment:
+      - HAL_ROLE=learner
+      - PS_HOST=ps
+      - REDIS_HOST=redis
+      - BATCH_SIZE=64
+    deploy:
+      replicas: 1
+      placement:
+        constraints: [node.labels.role == gpu]
+      restart_policy:
+        condition: on-failure
+
+  ppo-actor:
+    image: 192.168.1.250:5000/hal-ppo-actor:latest
+    command: python mesh/rl/dist/actor.py
+    networks: [hal-net]
+
+    environment:
+      - HAL_ROLE=actor
+      - PS_HOST=hal_ps
+      - REDIS_HOST=redis
+      - ACTOR_ID={{.Task.Slot}}
+      - RETRY_BACKOFF=2
+      - SWARM_BOOT_GRACE=15
+
+    deploy:
+      replicas: 4
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+      update_config:
+        order: start-first
+      placement:
+        constraints:
+          - node.labels.role == cpu-strong
+
+  gpu:
+    image: 192.168.1.250:5000/hal-gpu:latest
+    networks: [hal-net]
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.role == gpu
+      restart_policy:
+        condition: on-failure
+
+  mesh:
+    image: 192.168.1.250:5000/hal-mesh:latest
+    networks: [hal-net]
+    deploy:
+      replicas: 2
+      placement:
+        constraints:
+          - node.labels.role == cpu-strong
+      restart_policy:
+        condition: on-failure
+
+  rag:
+    image: 192.168.1.250:5000/hal-rag:latest
+    networks: [hal-net]
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.role == cpu-strong
+      restart_policy:
+        condition: on-failure
+
+networks:
+  hal-net:
+    external: true

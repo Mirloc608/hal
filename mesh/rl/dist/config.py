@@ -1,0 +1,10 @@
+POLICY_VERSION_KEY = "ppo:policy:version"
+WEIGHTS_KEY = "ppo:policy:weights"
+
+SYNC_INTERVAL_SEC = 2
+MIN_BATCH_SIZE = 64
+
+GAMMA = 0.99
+CLIP_EPS = 0.2
+LR = 3e-4
+ENTROPY_BONUS = 0.01

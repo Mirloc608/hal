@@ -1,0 +1,19 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+.env
+.env.*
+
+# runtime state (NEVER commit production state)
+state/
+logs/
+volumes/
+
+# docker artifacts
+*.log
+
+# local IDE stuff
+.vscode/
+.idea/
