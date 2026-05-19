@@ -15,6 +15,15 @@ rag:
   qdrant_host: http://localhost:6333
   collection: hal_memory
 
+memory:
+  immediate_store: redis
+  permanent_store: iris
+  redis:
+    host: http://localhost:6379
+    ttl_seconds: 3600
+  iris:
+    db_path: /opt/hal/runtime/memory/iris_memory.db
+
 mcp:
   enabled: true
   port: 9100
