@@ -15,6 +15,27 @@ rag:
   qdrant_host: http://localhost:6333
   collection: hal_memory
 
+memory:
+  immediate_store: redis
+  permanent_store: iris
+  redis:
+    host: http://localhost:6379
+    ttl_seconds: 3600
+  iris:
+    db_path: /opt/hal/runtime/memory/iris_memory.db
+
+agents:
+  hermes:
+    enabled: true
+    runtime_node: ai-srv-node1
+    role_label: cpu-weak
+    image: 192.168.1.250:5000/hal-hermes:latest
+    command: python agents/hermes_agent.py
+    env:
+      - REDIS_HOST=redis
+      - IRIS_DB_PATH=/opt/hal/runtime/memory/iris_memory.db
+      - HAL_MEMORY_SERVICE_URL=http://gateway:7200
+
 mcp:
   enabled: true
   port: 9100

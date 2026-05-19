@@ -9,6 +9,7 @@ services:
       - HAL_MODE=gateway
       - PS_HOST=ps
       - REDIS_HOST=redis
+      - IRIS_DB_PATH=/opt/hal/runtime/memory/iris_memory.db
     deploy:
       replicas: 1
       placement:
@@ -29,6 +30,34 @@ services:
     networks: [hal-net]
     deploy:
       replicas: 1
+      restart_policy:
+        condition: on-failure
+
+  iris:
+    image: intersystemsdc/iris-community:latest
+    networks: [hal-net]
+    environment:
+      - IRIS_USERNAME=hal
+      - IRIS_PASSWORD=hal
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+
+  hermes:
+    image: 192.168.1.250:5000/hal-hermes:latest
+    command: python agents/hermes_agent.py
+    networks: [hal-net]
+    environment:
+      - HAL_MODE=hermes
+      - REDIS_HOST=redis
+      - IRIS_DB_PATH=/opt/hal/runtime/memory/iris_memory.db
+      - HAL_MEMORY_SERVICE_URL=http://gateway:7200
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.hostname == ai-srv-node1
       restart_policy:
         condition: on-failure
 
